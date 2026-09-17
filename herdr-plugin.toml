@@ -1,0 +1,51 @@
+id = "herdr-palette"
+name = "Herdr Palette"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Schema-driven command palette: fuzzy search over every herdr operation, typed parameter traversal, ranked recents, live agent/pane pickers. Go + television."
+platforms = ["macos", "linux"]
+
+# plugin link does not run build commands; build manually:
+#   go build -o bin/herdr-palette ./cmd/herdr-palette
+[[build]]
+command = ["go", "build", "-o", "bin/herdr-palette", "./cmd/herdr-palette"]
+
+[[actions]]
+id = "open"
+title = "Open the herdr command palette"
+description = "Popup palette over all herdr operations (prefix+p)."
+contexts = ["global"]
+command = ["sh", "scripts/open-palette.sh"]
+
+[[actions]]
+id = "open-switch"
+title = "Open the herdr switch surface"
+description = "Popup picker for workspaces, tabs, and agents (prefix+shift+p). Tab cycles filters."
+contexts = ["global"]
+command = ["sh", "scripts/open-switch.sh"]
+
+[[actions]]
+id = "reindex"
+title = "Rebuild the API graph cache for the installed protocol"
+description = "Re-derives ~/.cache/herdr-palette/protocol-<N>.json from the live schema."
+contexts = ["global"]
+command = ["./bin/herdr-palette", "index"]
+
+# The palette popup. Television renders inside this pane; selections route
+# through the Go binary's built-in dispatcher via scripts/palette.sh.
+[[panes]]
+id = "palette"
+title = "herdr palette"
+placement = "popup"
+width = "90%"
+height = "80%"
+command = ["sh", "-c", "exec \"$HERDR_PLUGIN_ROOT/scripts/palette.sh\""]
+
+# The switch surface. Same popup geometry; runs the herdr-switch channel.
+[[panes]]
+id = "switch"
+title = "herdr switch"
+placement = "popup"
+width = "90%"
+height = "80%"
+command = ["sh", "-c", "exec \"$HERDR_PLUGIN_ROOT/scripts/switch-palette.sh\""]

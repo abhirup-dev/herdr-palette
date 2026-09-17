@@ -1,0 +1,66 @@
+{
+  "pane.move": {
+    "availability": "cli",
+    "argv": ["pane", "move"],
+    "params": {
+      "pane_id": {"positional": 0},
+      "destination.type": {"value_flags": {"tab": [], "new_tab": ["--new-tab"], "new_workspace": ["--new-workspace"]}},
+      "destination.tab_id": {"flag": "--tab"},
+      "destination.split": {"flag": "--split"},
+      "destination.target_pane_id": {"flag": "--target-pane"},
+      "destination.ratio": {"flag": "--ratio"},
+      "destination.workspace_id": {"flag": "--workspace"},
+      "destination.label": {"flag": "--label"},
+      "destination.tab_label": {"flag": "--tab-label"},
+      "focus": {"boolean": {"true": "--focus", "false": "--no-focus"}}
+    }
+  },
+  "pane.split": {
+    "availability": "cli",
+    "argv": ["pane", "split"],
+    "params": {
+      "direction": {"flag": "--direction"},
+      "cwd": {"flag": "--cwd"},
+      "focus": {"boolean": {"true": "--focus", "false": "--no-focus"}},
+      "ratio": {"flag": "--ratio"},
+      "right_click": {"flag": "--right-click"},
+      "target_pane_id": {"flag": "--pane"}
+    }
+  },
+  "pane.close": {"availability": "cli", "argv": ["pane", "close"], "params": {"pane_id": {"positional": 0}}},
+  "pane.zoom": {
+    "availability": "cli", "argv": ["pane", "zoom"],
+    "params": {"pane_id": {"positional": 0}, "mode": {"value_flags": {"toggle": ["--toggle"], "on": ["--on"], "off": ["--off"]}}}
+  },
+  "pane.rename": {"availability": "cli", "argv": ["pane", "rename"], "params": {"pane_id": {"positional": 0}, "label": {"positional": 1}}},
+  "pane.get": {"availability": "cli", "argv": ["pane", "get"], "params": {"pane_id": {"positional": 0}}},
+  "pane.focus": {"availability": "api-only", "argv": [], "params": {}},
+  "tab.create": {
+    "availability": "cli", "argv": ["tab", "create"],
+    "params": {"workspace_id": {"flag": "--workspace"}, "cwd": {"flag": "--cwd"}, "label": {"flag": "--label"}, "focus": {"boolean": {"true": "--focus", "false": "--no-focus"}}}
+  },
+  "tab.rename": {"availability": "cli", "argv": ["tab", "rename"], "params": {"tab_id": {"positional": 0}, "label": {"positional": 1}}},
+  "tab.close": {"availability": "cli", "argv": ["tab", "close"], "params": {"tab_id": {"positional": 0}}},
+  "tab.focus": {"availability": "cli", "argv": ["tab", "focus"], "params": {"tab_id": {"positional": 0}}},
+  "workspace.create": {
+    "availability": "cli", "argv": ["workspace", "create"],
+    "params": {"cwd": {"flag": "--cwd"}, "label": {"flag": "--label"}, "focus": {"boolean": {"true": "--focus", "false": "--no-focus"}}}
+  },
+  "workspace.rename": {"availability": "cli", "argv": ["workspace", "rename"], "params": {"workspace_id": {"positional": 0}, "label": {"positional": 1}}},
+  "workspace.close": {"availability": "cli", "argv": ["workspace", "close"], "params": {"workspace_id": {"positional": 0}}},
+  "workspace.focus": {"availability": "cli", "argv": ["workspace", "focus"], "params": {"workspace_id": {"positional": 0}}},
+  "agent.read": {
+    "availability": "cli", "argv": ["agent", "read"],
+    "params": {"target": {"positional": 0}, "source": {"flag": "--source", "values": {"recent_unwrapped": "recent-unwrapped"}}, "format": {"flag": "--format"}, "lines": {"flag": "--lines"}}
+  },
+  "agent.focus": {"availability": "cli", "argv": ["agent", "focus"], "params": {"target": {"positional": 0}}},
+  "agent.prompt": {
+    "availability": "cli", "argv": ["agent", "prompt"],
+    "params": {"target": {"positional": 0}, "text": {"positional": 1}, "wait": {"presence_flag": "--wait"}, "wait.timeout_ms": {"flag": "--timeout"}, "wait.until": {"flag": "--until", "repeat": true}}
+  },
+  "agent.rename": {"availability": "cli", "argv": ["agent", "rename"], "params": {"target": {"positional": 0}, "name": {"positional": 1}}},
+  "notification.show": {
+    "availability": "cli", "argv": ["notification", "show"],
+    "params": {"title": {"positional": 0}, "body": {"flag": "--body"}, "position": {"flag": "--position"}, "sound": {"flag": "--sound"}}
+  }
+}
