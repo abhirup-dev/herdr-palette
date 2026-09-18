@@ -1,16 +1,31 @@
-# herdr command palette — source/preview/run all invoke the herdr-palette binary.
-# Consumed by the herdr-palette plugin popup (scripts/palette.sh runs `tv herdr`).
-# Entries are LABEL<TAB>COMMAND; the raw line is returned so the caller can split it.
+# herdr command palette — Television channel (ACTIONS surface, default).
+# Source emits: LABEL<TAB>COMMAND lines (herdr-palette source).
+# The switch/navigation surface lives in the separate `herdr-switch` channel,
+# so this one stays a plain, single-purpose actions menu.
+#
+# @BIN@ is substituted with the resolved herdr-palette binary by
+# scripts/install-channel.sh — do not hardcode a checkout path here.
+
 [metadata]
 name = "herdr"
-description = "herdr command palette — every herdr operation over the live session"
+description = "Herdr command palette: agents, panes, tabs, workspaces, server ops"
+requirements = ["herdr"]
 
 [source]
-command = "herdr-palette source"
+command = "@BIN@ source"
 display = "{split:\t:0}"
+no_sort = true  # preserve grouping order (ranked head, then catalog)
 
 [preview]
-command = "herdr-palette preview '{split:\t:1}'"
+command = "@BIN@ preview '{split:\t:1}'"
 
-[ui.preview_panel]
-size = 50
+[ui]
+preview_panel = { size = 55 }
+
+[keybindings]
+ctrl-e = "actions:run"
+
+[actions.run]
+description = "Execute the selected herdr command"
+command = "@BIN@ select '{split:\t:1}' '{split:\t:0}'"
+mode = "execute"

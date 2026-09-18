@@ -1,0 +1,43 @@
+# herdr switch surface — Television channel (NAVIGATION surface).
+# Unified picker for switching between workspaces, tabs, and agent panes.
+#
+# Filter presets are cyclable sources — press Tab to cycle:
+#   All → Workspaces → Tabs → Agents (and back)
+# The dots indicator (⟨ ● ○ ○ ○ ⟩) shows the active filter.
+#
+# Entries are hierarchical (workspace / tab / pane (agent)) so a query can
+# match at any level. Enter focuses the target through the same dispatcher
+# as the actions palette.
+#
+# @BIN@ is substituted by scripts/install-channel.sh.
+
+[metadata]
+name = "herdr-switch"
+description = "Herdr switcher: jump between workspaces, tabs, and agents"
+requirements = ["herdr"]
+
+[source]
+command = [
+  { name = "All",        run = "@BIN@ source switch --filter all" },
+  { name = "Workspaces", run = "@BIN@ source switch --filter ws" },
+  { name = "Tabs",       run = "@BIN@ source switch --filter tabs" },
+  { name = "Agents",     run = "@BIN@ source switch --filter agents" },
+]
+display = "{split:\t:0}"
+no_sort = true  # preserve hierarchy grouping
+
+# No preview on the switch surface: labels carry the full context.
+[ui]
+input_header = "Switch  [Tab: filter]"
+preview_panel = { hidden = true }
+
+[keybindings]
+# Tab cycles the filter presets (overrides tv's toggle-selection default).
+tab = "cycle_sources"
+backtab = "cycle_sources"
+ctrl-e = "actions:run"
+
+[actions.run]
+description = "Focus the selected target"
+command = "@BIN@ select '{split:\t:1}' '{split:\t:0}'"
+mode = "execute"
