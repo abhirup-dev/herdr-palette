@@ -10,6 +10,11 @@ platforms = ["macos", "linux"]
 [[build]]
 command = ["go", "build", "-o", "bin/herdr-palette", "./cmd/herdr-palette"]
 
+# The popups shell out to `tv herdr`; without the channel installed the pane
+# dies instantly and the keybinding looks dead. Keep this next to the go build.
+[[build]]
+command = ["sh", "scripts/install-channel.sh"]
+
 [[actions]]
 id = "open"
 title = "Open the herdr command palette"

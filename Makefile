@@ -10,7 +10,7 @@ INSTALLED_BINARY := $(BINDIR)/herdr-palette
 
 .DEFAULT_GOAL := help
 
-.PHONY: help build format check install install-cli install-plugin install-keybinding test clean
+.PHONY: help build format check install install-cli install-plugin install-keybinding install-channel test clean
 
 help:
 	@printf '%s\n' \
@@ -22,6 +22,7 @@ help:
 	  'make install-cli        Install the CLI under $(BINDIR)' \
 	  'make install-plugin     Build and link this checkout into Herdr' \
 	  'make install-keybinding Add the prefix+P binding to the Herdr config once' \
+	  'make install-channel    Install the Television channel(s) into ~/.config/television/cable' \
 	  'make clean              Remove the local build artifact' \
 	  '' \
 	  'Overrides: PREFIX=… BINDIR=… GO=… GOFMT=… HERDR=… HERDR_CONFIG_PATH=…'
@@ -45,7 +46,7 @@ check:
 test:
 	$(GO) test ./...
 
-install: install-cli install-plugin install-keybinding
+install: install-cli install-plugin install-channel install-keybinding
 	@printf 'herdr-palette installed: %s\n' "$(INSTALLED_BINARY)"
 
 install-cli: build
@@ -58,6 +59,9 @@ install-cli: build
 
 install-plugin: build
 	$(HERDR) plugin link "$(CURDIR)"
+
+install-channel:
+	scripts/install-channel.sh
 
 install-keybinding:
 	HERDR_BIN_PATH="$(HERDR)" HERDR_CONFIG_PATH="$(HERDR_CONFIG_PATH)" scripts/install-keybinding.sh

@@ -5,6 +5,17 @@
 # dispatcher like the actions palette.
 set -u
 
+if ! command -v tv >/dev/null 2>&1; then
+  printf 'herdr-palette: television (tv) not found — brew install television\n' >&2
+  read -r _ || true
+  exit 1
+fi
+if ! tv list-channels 2>/dev/null | grep -qx 'herdr-switch'; then
+  printf 'herdr-palette: television channel "herdr-switch" missing — run: make install-channel\n' >&2
+  read -r _ || true
+  exit 1
+fi
+
 sel=$(tv herdr-switch)
 [ -z "$sel" ] && exit 0
 

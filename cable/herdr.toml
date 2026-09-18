@@ -1,0 +1,16 @@
+# herdr command palette — source/preview/run all invoke the herdr-palette binary.
+# Consumed by the herdr-palette plugin popup (scripts/palette.sh runs `tv herdr`).
+# Entries are LABEL<TAB>COMMAND; the raw line is returned so the caller can split it.
+[metadata]
+name = "herdr"
+description = "herdr command palette — every herdr operation over the live session"
+
+[source]
+command = "herdr-palette source"
+display = "{split:\t:0}"
+
+[preview]
+command = "herdr-palette preview '{split:\t:1}'"
+
+[ui.preview_panel]
+size = 50

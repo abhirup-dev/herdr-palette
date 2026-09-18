@@ -9,18 +9,26 @@ Installed as a Herdr plugin (`herdr plugin link`) — **this repo root is the
 single home for all code and data**. The historical bash+jq implementation
 is archived, unwired, under `legacy-bash/`.
 
+## Requirements
+
+- [Television](https://github.com/alexpasmantier/television) (`tv`) — the popup
+  renderer. `brew install television`. Both popups shell out to `tv`; if it is
+  missing the pane exits immediately and the keybinding looks like a no-op.
+
 ## Install
 
 ```sh
-make install          # build + link plugin + install CLI + prefix+P keybinding
+make install          # build + link plugin + install CLI + channel + prefix+P keybinding
 ```
 
 - CLI: `~/.local/bin/herdr-palette`
 - Plugin: `herdr plugin link` (manifest `herdr-plugin.toml`; popup pane +
   actions)
 - Keybinding: `prefix+p` → plugin action `herdr-palette.open`
-- Television channel: `~/.config/television/cable/herdr.toml` (source,
-  preview, and run actions all invoke this binary)
+- Television channel: `cable/herdr.toml` -> `~/.config/television/cable/herdr.toml`
+  (source, preview, and run actions all invoke this binary). Installed by
+  `make install-channel`, and by the plugin `[[build]]` step so a plain
+  `herdr plugin install` is self-sufficient.
 
 ## Subcommands
 
