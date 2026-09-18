@@ -26,15 +26,20 @@ import (
 // path as actions. The channel uses no_sort so grouping stays stable.
 func SwitchSource(filter string) (string, error) {
 	snap, _ := FetchSnapshot()
+	if snap == nil {
+		return "[error] herdr snapshot unavailable\therdr status server\n", nil
+	}
+	return switchRows(&snap.Result.Snapshot, filter), nil
+}
+
+// switchRows is the pure half of SwitchSource: snapshot in, rows out, no I/O.
+// Split out so the row shapes and focus commands are testable without a live
+// herdr server.
+func switchRows(s *Snapshot, filter string) string {
 	var b strings.Builder
 	emit := func(label, command string) {
 		fmt.Fprintf(&b, "%s\t%s\n", label, command)
 	}
-	if snap == nil {
-		emit("[error] herdr snapshot unavailable", "herdr status server")
-		return b.String(), nil
-	}
-	s := &snap.Result.Snapshot
 	if filter == "" {
 		filter = "all"
 	}
@@ -71,16 +76,24 @@ func SwitchSource(filter string) (string, error) {
 			ws := wsLabel(s, p.WorkspaceID)
 			tab := tabLabel(s, p.TabID)
 			kind := kindOf[p.PaneID]
-			var label string
+			var label, command string
 			if kind == "" || kind == "shell" {
 				label = clean(fmt.Sprintf("pane %s / %s / %s", ws, tab, title))
+				// `herdr agent focus` resolves an AGENT target, so it answers
+				// agent_not_found for a plain shell pane. Focusing an arbitrary
+				// pane needs the pane.focus protocol method, which bindings.json
+				// marks api-only (empty argv) — there is no CLI for it, and
+				// `pane focus` is neighbour-only (--direction required).
+				// Fall back to the containing tab: the pane is visible there.
+				command = "herdr tab focus " + p.TabID
 			} else {
 				label = clean(fmt.Sprintf("agt  %s / %s / %s (%s)", ws, tab, title, kind))
+				command = "herdr agent focus " + p.PaneID
 			}
-			emit(label, "herdr agent focus "+p.PaneID)
+			emit(label, command)
 		}
 	}
-	return b.String(), nil
+	return b.String()
 }
 
 func wsLabel(s *Snapshot, wsID string) string {
